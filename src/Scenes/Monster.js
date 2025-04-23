@@ -7,43 +7,6 @@ class Monster extends Phaser.Scene {
         this.bodyX = 300;
         this.bodyY = 350;
 
-        // arms
-        this.armRightX = this.bodyX + 90;
-        this.armRightY = this.bodyY + 30;
-
-        this.armLeftX = this.bodyX - 90;
-        this.armLeftY = this.bodyY + 30;
-
-        // legs
-        this.legRightX = this.bodyX + 60;
-        this.legRightY = this.bodyY + 100;
-
-        this.legLeftX = this.bodyX - 60;
-        this.legLeftY = this.bodyY + 100;
-
-        // eyes
-        this.eyeRightX = this.bodyX;
-        this.eyeRightY = this.bodyY;
-        
-        this.eyeLeftX = this.bodyX;
-        this.eyeLeftY = this.bodyY;
-
-        // sensory
-        this.noseX = this.bodyX;
-        this.noseY = this.bodyY;
-
-        this.earRightX = this.bodyX;
-        this.earRightY = this.bodyY;
-
-        this.earLeftX = this.bodyX;
-        this.earLeftY = this.bodyY;
-
-        // mouths
-        this.mouthSmileX = this.bodyX;
-        this.mouthSmileY = this.bodyY;
-
-        this.mouthFangsX = this.bodyX;
-        this.mouthFangsY = this.bodyY;   
     }
 
     // Use preload to load art and sound assets before the scene starts running.
@@ -60,7 +23,7 @@ class Monster extends Phaser.Scene {
     }
 
     create() {
-        let my = this.my;   // create an alias to this.my for readability
+        let my = this.my;
 
 
         // Create the main body sprite
@@ -70,28 +33,75 @@ class Monster extends Phaser.Scene {
         // look in spritesheet_default.xml for the individual sprite names
         // You can also download the asset pack and look in the PNG/default folder.
         
-
-        my.sprite.armRight = this.add.sprite(this.armRightX, this.armRightY, "monsterParts", "arm_darkE.png");
+        // arms
+        my.sprite.armRight = this.add.sprite(this.bodyX + 90, this.bodyY + 30, "monsterParts", "arm_darkE.png");
         my.sprite.armRight.angle = -30;
 
-        my.sprite.armLeft = this.add.sprite(this.armLeftX, this.armLeftY, "monsterParts", "arm_yellowE.png");
+        my.sprite.armLeft = this.add.sprite(this.bodyX - 90, this.bodyY + 30, "monsterParts", "arm_yellowE.png");
         my.sprite.armLeft.flipX = true;
         my.sprite.armLeft.angle = 30;
         
-        my.sprite.legRight = this.add.sprite(this.legRightX, this.legRightY, "monsterParts", "leg_greenE.png")
+        // legs
+        my.sprite.legRight = this.add.sprite(this.bodyX + 60, this.bodyY + 100, "monsterParts", "leg_greenE.png");
     
-        my.sprite.legLeft = this.add.sprite(this.legLeftX, this.legLeftY, "monsterParts", "leg_blueC.png")
+        my.sprite.legLeft = this.add.sprite(this.bodyX - 60, this.bodyY + 100, "monsterParts", "leg_blueC.png");
         my.sprite.legLeft.flipX = true;
+
+        // right ear
+        my.sprite.headRight = this.add.sprite(this.bodyX + 60, this.bodyY - 90, "monsterParts", "detail_green_ear.png");
         
-
-
+        // body
         my.sprite.body = this.add.sprite(this.bodyX, this.bodyY, "monsterParts", "body_redF.png");
+        
+        // left antenna
+        my.sprite.headLeft = this.add.sprite(this.bodyX - 50, this.bodyY - 110, "monsterParts", "detail_white_antenna_large.png");
+        my.sprite.headLeft.flipX = true;
+        my.sprite.headLeft.angle = -30;
+
+        // eyes
+        my.sprite.eyeLeft = this.add.sprite(this.bodyX - 30, this.bodyY - 50, "monsterParts", "eye_human.png");
+        my.sprite.eyeRight = this.add.sprite(this.bodyX + 33, this.bodyY - 50, "monsterParts", "eye_dead.png");
+        
+        // nose
+        my.sprite.nose = this.add.sprite(this.bodyX, this.bodyY, "monsterParts", "nose_yellow.png");
+
+        // mouths
+        my.sprite.smile = this.add.sprite(this.bodyX, this.bodyY + 25, "monsterParts", "mouth_closed_happy.png");
+        my.sprite.fangs = this.add.sprite(this.bodyX, this.bodyY + 25, "monsterParts", "mouth_closed_fangs.png");
+        my.sprite.fangs.visible = false;
+        
+        // keys
+        this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+        this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+
 
     }
 
     update() {
-        let my = this.my;    // create an alias to this.my for readability
+        if (Phaser.Input.Keyboard.JustDown(this.keyS)) {
+            this.my.sprite.fangs.visible = false;
+            this.my.sprite.smile.visible = true;
+        }
 
+        if (Phaser.Input.Keyboard.JustDown(this.keyF)) {
+            this.my.sprite.smile.visible = false;
+            this.my.sprite.fangs.visible = true;
+        }
+
+        if (this.keyA.isDown) {
+            for (let part in this.my.sprite) {
+                this.my.sprite[part].x -= 1;
+            }
+        }
+
+        if (this.keyD.isDown) {
+            for (let part in this.my.sprite) {
+                this.my.sprite[part].x += 1;
+            }
+        }
        
     }
 
